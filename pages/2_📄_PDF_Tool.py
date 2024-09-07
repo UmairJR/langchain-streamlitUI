@@ -29,7 +29,7 @@ openai_key = ""
 status = st.empty()
 if "OPENAI_API_KEY" in st.session_state:
     openai_key = st.session_state["OPENAI_API_KEY"]
-    status.success("API Key uploaded 🆗"+openai_key)
+    status.success("API Key uploaded 🆗")
 else:
     status.error("Please enter API Key")
 
@@ -64,9 +64,9 @@ if pdf is not None:
     main_placeholder.text("Embedding Vector Started Building...🔨🔨🔨‍")
     embedding = OpenAIEmbeddings(openai_api_key = openai_key)
     vectorstore = FAISS.from_texts(chunks, embedding=embedding)
-
+    main_placeholder.text("")
     # Input for querying the PDF content
-    query = main_placeholder.text_input("Ask any question about the PDF:")
+    query = st.text_input("Ask any question about the PDF:")
 
     if query:
         # Perform similarity search to find relevant chunks
