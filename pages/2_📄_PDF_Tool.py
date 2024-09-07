@@ -6,6 +6,7 @@ from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
+from openai import api_key
 
 st.set_page_config(page_title="PDF Tool", page_icon="📄")
 
@@ -61,7 +62,7 @@ if pdf is not None:
 
     # Create vectorstore from text chunks
     main_placeholder.text("Embedding Vector Started Building...🔨🔨🔨‍")
-    embedding = OpenAIEmbeddings()
+    embedding = OpenAIEmbeddings(api_key=openai_key)
     vectorstore = FAISS.from_texts(chunks, embedding=embedding)
 
     # Input for querying the PDF content
