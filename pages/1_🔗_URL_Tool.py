@@ -30,7 +30,7 @@ openai_key = ''
 status = st.empty()
 if "OPENAI_API_KEY" in st.session_state:
     openai_key = st.session_state["OPENAI_API_KEY"]
-    status.success("API Key uploaded 🆗"+ openai_key)
+    status.success("API Key uploaded 🆗")
 else:
     status.error("Please enter API Key")
 
