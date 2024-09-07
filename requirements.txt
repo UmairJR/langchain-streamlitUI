@@ -7,3 +7,6 @@ faiss-cpu==1.8.0.post1
 OpenAI == 0.28.0
 PyPDF2==3.0.1
 langchain-community
+python-magic-bin
+python-magic
+libmagic
