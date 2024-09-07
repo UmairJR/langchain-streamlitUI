@@ -62,7 +62,7 @@ if pdf is not None:
 
     # Create vectorstore from text chunks
     main_placeholder.text("Embedding Vector Started Building...🔨🔨🔨‍")
-    embedding = OpenAIEmbeddings()
+    embedding = OpenAIEmbeddings(openai_api_key = openai_key)
     vectorstore = FAISS.from_texts(chunks, embedding=embedding)
 
     # Input for querying the PDF content
@@ -73,7 +73,7 @@ if pdf is not None:
         similar_chunks = vectorstore.similarity_search(query=query, k=2)
 
         # Initialize LLM
-        llm = OpenAI(api_key=openai_key, model_name="gpt-3.5-turbo")
+        llm = OpenAI(openai_api_key=openai_key, model_name="gpt-3.5-turbo")
         chain = load_qa_chain(llm=llm, chain_type="stuff")
 
         # Get the response from the LLM
@@ -83,5 +83,6 @@ if pdf is not None:
         st.write(response)
 
         st.subheader("Reference Documents:")
-        st.write(similar_chunks[0])
-        st.write(similar_chunks[1])
+        for i, chunk in enumerate(similar_chunks):
+            st.write(f"Document {i + 1}:")
+            st.write(chunk)
