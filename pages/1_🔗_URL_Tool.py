@@ -76,7 +76,7 @@ if process_url_clicked:
         if not docs:
             st.error("No documents found after splitting.")
         else:
-            embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+            embeddings = OpenAIEmbeddings(openai_api_key=openai_key, model="text-embedding-3-large")
 
             # Generate document embeddings with error handling
             try:
@@ -88,26 +88,26 @@ if process_url_clicked:
                     pickle.dump(vectorstore_openai, f)
             except Exception as e:
                 st.error(f"Unexpected Error: {str(e)}")
-            query = main_placeholder.text_input("Question: ")
-            if query:
-                # Check if FAISS store exists
-                if os.path.exists(file_path):
-                    with open(file_path, "rb") as f:
-                        vectorstore = pickle.load(f)
-                        llm = ChatOpenAI(api_key=openai_key, temperature=0.9, max_tokens=500)
-                        chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vectorstore.as_retriever())
-                        result = chain({"question": query}, return_only_outputs=True)
 
-                        st.header("Answer")
-                        st.write(result["answer"])
+query = main_placeholder.text_input("Question: ")
+if query:
+    # Check if FAISS store exists
+    if os.path.exists(file_path):
+        with open(file_path, "rb") as f:
+            vectorstore = pickle.load(f)
+            llm = ChatOpenAI(openai_api_key=openai_key, temperature=0.9, max_tokens=500)
+            chain = RetrievalQAWithSourcesChain.from_llm(llm=llm, retriever=vectorstore.as_retriever())
+            result = chain({"question": query}, return_only_outputs=True)
 
-                        # Display sources
-                        sources = result.get("sources", "")
-                        if sources:
-                            st.subheader("Sources: ")
-                            sources_list = sources.split("\n")
-                            for source in sources_list:
-                                st.write(source)
-                else:
-                    st.error("No FAISS index found. Please process the URLs first.")
+            st.header("Answer")
+            st.write(result["answer"])
 
+            # Display sources
+            sources = result.get("sources", "")
+            if sources:
+                st.subheader("Sources: ")
+                sources_list = sources.split("\n")
+                for source in sources_list:
+                    st.write(source)
+    else:
+        st.error("No FAISS index found. Please process the URLs first.")
