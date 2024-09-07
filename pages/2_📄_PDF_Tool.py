@@ -6,7 +6,7 @@ from langchain.vectorstores import FAISS
 from langchain.llms import OpenAI
 from langchain_community.chat_models import ChatOpenAI
 from langchain.chains.question_answering import load_qa_chain
-from openai import api_key
+
 
 st.set_page_config(page_title="PDF Tool", page_icon="📄")
 
@@ -29,13 +29,13 @@ openai_key = ""
 status = st.empty()
 if "OPENAI_API_KEY" in st.session_state:
     openai_key = st.session_state["OPENAI_API_KEY"]
-    status.success("API Key uploaded 🆗")
+    status.success("API Key uploaded 🆗"+openai_key)
 else:
     status.error("Please enter API Key")
 
 if not openai_key:
     st.info("Please add your OpenAI API key to continue.")
-    st.stop()  # Stop execution if no API key is provided
+    st.stop()
 
 pdf = st.sidebar.file_uploader("Choose a PDF file", type="pdf")
 
@@ -50,7 +50,7 @@ if pdf is not None:
     main_placeholder.text("Data Loading...Started...🚴🚴🚴")
     text = ""
     for page in pdf_obj.pages[:50]:  # Limit to first 50 pages to avoid excessive processing
-        text += page.extract_text() or ""
+        text += page.extract_text()
     main_placeholder.text("Text Splitting...Started...🔃🔃🔃")
     # Split text into chunks
     text_splitter = RecursiveCharacterTextSplitter(
@@ -58,11 +58,11 @@ if pdf is not None:
         chunk_overlap=200,
         length_function=len
     )
-    chunks = text_splitter.split_text(text)
+    chunks = text_splitter.split_text(text=text)
 
     # Create vectorstore from text chunks
     main_placeholder.text("Embedding Vector Started Building...🔨🔨🔨‍")
-    embedding = OpenAIEmbeddings(api_key=openai_key)
+    embedding = OpenAIEmbeddings()
     vectorstore = FAISS.from_texts(chunks, embedding=embedding)
 
     # Input for querying the PDF content
@@ -83,6 +83,5 @@ if pdf is not None:
         st.write(response)
 
         st.subheader("Reference Documents:")
-        for i, chunk in enumerate(similar_chunks):
-            st.write(f"Document {i + 1}:")
-            st.write(chunk)
+        st.write(similar_chunks[0])
+        st.write(similar_chunks[1])
