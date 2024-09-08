@@ -59,7 +59,7 @@ if process_url_clicked:
     loader = UnstructuredURLLoader(urls=urls)
     main_placeholder.text("Data Loading...Started...✅✅✅")
     data = loader.load()
-    st.write(data)
+
 
 
     # Check if data is loaded
