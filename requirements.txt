@@ -6,7 +6,7 @@ tiktoken==0.7.0
 faiss-cpu==1.8.0.post1
 OpenAI == 0.28.0
 PyPDF2==3.0.1
-langchain-community~=0.2.16
+langchain-community
 python-magic
 libmagic
 nltk~=3.9.1
