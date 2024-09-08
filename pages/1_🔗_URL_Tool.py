@@ -11,7 +11,6 @@ from langchain.vectorstores import FAISS
 import os
 import nltk
 
-nltk.download('punkt')
 nltk.download('punkt_tab')
 
 
