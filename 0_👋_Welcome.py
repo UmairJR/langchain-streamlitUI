@@ -1,9 +1,6 @@
 import streamlit as st
 import re
-import nltk
 
-nltk.download('punkt')
-nltk.download('punkt_tab')
 
 
 st.set_page_config(page_title="Welcome", page_icon="👨‍💻")

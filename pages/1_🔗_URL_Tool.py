@@ -9,7 +9,10 @@ from langchain.document_loaders import UnstructuredURLLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import FAISS
 import os
+import nltk
 
+nltk.download('punkt')
+nltk.download('punkt_tab')
 
 
 st.set_page_config(page_title="URL Tool", page_icon="🔗")
